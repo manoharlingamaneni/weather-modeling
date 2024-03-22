@@ -1,40 +1,88 @@
-# This workflow will install Python dependencies, run tests and lint with a variety of Python versions
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
+# Step 1: Hard-coding Variables for Weather Modeling
 
-name: Python package
+def temperature_modeling(a, b, c, time):
+    """
+    Function to model temperature using a quadratic equation.
+    
+    Parameters:
+        a (float): Coefficient a.
+        b (float): Coefficient b.
+        c (float): Coefficient c.
+        time (float): Time in hours.
+    
+    Returns:
+        float: Calculated temperature.
+    """
+    # Calculate temperature based on time using the quadratic equation
+    temperature = a * time**2 + b * time + c
+    return temperature
 
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+# Hand-coded coefficients for temperature modeling
+a_hardcoded, b_hardcoded, c_hardcoded = 0.1, 2, 30
 
-jobs:
-  build:
+# Display results
+print("Step 1: Hard-coded Variables for Weather Modeling")
+time_hardcoded = 6  # Example time value
+print("Temperature for hardcoded coefficients at time", time_hardcoded, ": ", temperature_modeling(a_hardcoded, b_hardcoded, c_hardcoded, time_hardcoded), "\n")
 
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        python-version: ["3.9", "3.10", "3.11"]
+# Step 2: Keyboard Input for Weather Modeling
 
-    steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v3
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        python -m pip install flake8 pytest
-        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-    - name: Lint with flake8
-      run: |
-        # stop the build if there are Python syntax errors or undefined names
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-    - name: Test with pytest
-      run: |
-        pytest
+# Set coefficients from user input
+a_keyboard = float(input("Enter coefficient a: "))
+b_keyboard = float(input("Enter coefficient b: "))
+c_keyboard = float(input("Enter coefficient c: "))
+
+# Get time from user input
+time_keyboard = float(input("Enter time in hours: "))
+
+# Calculate temperature using user-input coefficients and time
+temperature_keyboard = temperature_modeling(a_keyboard, b_keyboard, c_keyboard, time_keyboard)
+
+# Display temperature calculated from user-input coefficients and time
+print("Temperature for user-input coefficients at time", time_keyboard, ": ", temperature_keyboard)
+
+# Step 3: File Input for Weather Modeling
+
+def read_coefficients_from_file(filename):
+    """
+    Function to read coefficients from a file.
+    
+    Parameters:
+        filename (str): Name of the file containing coefficients.
+    
+    Returns:
+        tuple: Coefficients (a, b, c) read from the file.
+    """
+    with open(filename, 'r') as file:
+        coefficients = [float(x) for x in file.readline().split()]
+    return tuple(coefficients)
+
+filename = "coefficients.txt"
+a_file, b_file, c_file = read_coefficients_from_file(filename)
+
+# Get time from user input
+time_file = float(input("Enter time in hours: "))
+
+# Calculate temperature using coefficients from the file and user-input time
+temperature_file = temperature_modeling(a_file, b_file, c_file, time_file)
+
+# Display temperature calculated from coefficients in the file and user-input time
+print("Temperature for coefficients from file at time", time_file, ": ", temperature_file)
+
+# Step 4: File Output for Weather Modeling
+
+def write_temperature_to_file(filename, time, temperature):
+    """
+    Function to write temperature to a file.
+    
+    Parameters:
+        filename (str): Name of the file to write temperature to.
+        time (float): Time for which temperature is calculated.
+        temperature (float): Calculated temperature.
+    """
+    with open(filename, 'w') as file:
+        file.write(f"Time: {time} hours\nTemperature: {temperature}")
+
+output_filename = "temperature_output.txt"
+write_temperature_to_file(output_filename, time_file, temperature_file)
+print("Temperature written to", output_filename)
